@@ -4,8 +4,8 @@ include_once "Configuration/ServerConfig.php";
 include_once "QueryHandler.php";
 
 class dBHandler{
-    private ServerConfig $serverConfig;
     private $PDO;
+    private ServerConfig $serverConfig;
     private QueryHandler $queryHandler;
     public function __construct() {
         $this->serverConfig = new ServerConfig('apihelpertest', 'root', '');

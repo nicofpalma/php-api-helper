@@ -46,17 +46,20 @@ class Response{
         echo json_encode($this->response);
     }
 
-    public function exitAndSendResponse(){
-        $this->sendHttpCode();
-        $this->unsetHttpCode();
-        $this->sendJsonResponse();
-        exit;
-    }
-
-    static function exitAndSendExternalResponse(Response $response){
+    private static function perfomEchoResponse(Response $response){
         $response->sendHttpCode();
         $response->unsetHttpCode();
         $response->sendJsonResponse();
+        exit;
+    }
+
+    public function echoResponse(){
+        self::perfomEchoResponse($this);
+        exit;
+    }
+
+    static function echoExternalResponse(Response $response){
+        self::perfomEchoResponse($response);
         exit;
     }
 }

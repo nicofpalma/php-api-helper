@@ -1,6 +1,7 @@
 <?php
 
 function getAllUsers(){
+    includeOnce('ApiHelper/ApiTest/dbHandler.php');
     $db = new dBHandler();
     $users = $db->getAllUsers();
 

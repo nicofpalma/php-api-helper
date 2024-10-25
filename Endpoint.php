@@ -1,32 +1,32 @@
 <?php
 
+include_once "Utils/Utils.php";
+
 class Endpoint{
-    private $endpointName;
-    private $endpointBody;
+    private $endpoint;
 
-    public function __construct($endpointName, callable $endpointBody) {
-        $this->endpointName = $endpointName;
-        $this->endpointBody = $endpointBody;
-    }
+    private $path;
 
-    public function getEndpointName(){
-        return $this->endpointName;
-    } 
+    public function __construct($endpointPath) {
+        includeOnce($endpointPath);
 
-    public function callFunction(){
-        if(is_callable($this->endpointBody)){
-            return call_user_func($this->endpointBody);
-        } else {
-            echo 'error';
+        $this->path = $endpointPath;
+        $this->endpoint = $this->extractFunctionName($this->path);
+        
+        if(!is_callable($this->endpoint)){
+            throw new Exception("The endpoint '{$this->endpoint}' is not callable");
         }
     }
 
-    public function getMethodFunction(){
-        return ['endpointName' => $this->endpointName, 'endpointBody' => $this->endpointBody];
+    public function getEndpointName(){
+        return $this->endpoint;
+    } 
+
+    public function callFunction(){
+        return call_user_func($this->endpoint);
     }
 
-    public function returnGetParams(){
-        return $_GET;
+    private function extractFunctionName(string $path){
+        return pathinfo($path, PATHINFO_FILENAME);
     }
-    
 }
