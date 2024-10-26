@@ -41,7 +41,7 @@ class HTTPRequest {
         }
     }
 
-    public function listenRequest(){
+    public function listen(){
         switch ($_SERVER['REQUEST_METHOD']) {
             case 'GET':
                 Response::echoExternalResponse($this->getEndpoints()); 
@@ -69,7 +69,13 @@ class HTTPRequest {
     }
 
     public function postEndpoints(): Response{
-        return new Response(false, 'dont coded yet', 500);
+        $requestedEndpoint = $_POST[$this->endpointIdentifierField] ?? null;
+
+        if(isset($this->POSTEndpoints[$requestedEndpoint])){
+            return $this->POSTEndpoints[$requestedEndpoint]->callFunction();
+        }
+
+        return new Response(false, 'POST Method not found', 500);
     }
 }
 

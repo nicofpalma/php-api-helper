@@ -26,4 +26,36 @@ class dBHandler{
             true
         );
     }
+
+    public function insertUser($username, $password){
+        $this->queryHandler->setTypeOfQuery(QueryHandler::INSERT);
+        return $this->queryHandler->makeQuery(
+            "INSERT INTO users (username, password) VALUES (:username, :password)",
+            [$username, $password]
+        );
+    }
+
+    public function updateUser($id, $username, $password){
+        $this->queryHandler->setTypeOfQuery(QueryHandler::UPDATE);
+        return $this->queryHandler->makeQuery(
+            "UPDATE users SET username = :username, password = :password WHERE id = :id",
+            [$username, $password, $id]
+        );
+    }
+
+    public function deleteUser($id){
+        $this->queryHandler->setTypeOfQuery(QueryHandler::DELETE);
+        return $this->queryHandler->makeQuery(
+            "DELETE FROM users WHERE id = :id",
+            [$id]
+        );
+    }
+
+    public function getLastInsertedId(){
+        return $this->queryHandler->getLastInsertedId();
+    }
+
+    public function getAffectedRows(){
+        return $this->queryHandler->getAffectedRows();
+    }
 }

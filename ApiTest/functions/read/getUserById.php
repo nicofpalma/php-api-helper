@@ -1,7 +1,7 @@
 <?php
 
 function getUserById(){
-    checkRequiredParam(GET['id']);
+    checkRequiredParam(['id'], 'GET');
     includeOnce('ApiHelper/ApiTest/dbHandler.php');
 
     $db = new dBHandler();
