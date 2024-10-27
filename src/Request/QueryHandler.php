@@ -1,5 +1,13 @@
 <?php
 
+namespace ApiHelper\Request;
+
+use PDO;
+use PDOException;
+use InvalidArgumentException;
+use RuntimeException;
+
+
 class QueryHandler{
     private PDO $PDO;
     private int $typeOfQuery;

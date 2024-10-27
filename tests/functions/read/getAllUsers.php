@@ -1,7 +1,10 @@
 <?php
 
+use ApiHelper\Utils\Utils;
+use ApiHelper\Response\Response;
+
 function getAllUsers(){
-    includeOnce('ApiHelper/ApiTest/dbHandler.php');
+    Utils::includeOnce('ApiHelper/tests/dbHandler.php');
     $db = new dBHandler();
     $users = $db->getAllUsers();
 

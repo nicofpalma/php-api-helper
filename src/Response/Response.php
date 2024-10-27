@@ -1,5 +1,7 @@
 <?php
 
+namespace ApiHelper\Response;
+
 class Response{
     private array $response;
 

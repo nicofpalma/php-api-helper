@@ -1,23 +1,26 @@
 <?php
 // to simulate data entry
-//simulateGET();
-simulateUpdate();
+simulateGET();
+//simulateUpdate();
+//simulateInsert();
+//simulateDelete();
+
+require_once __DIR__ . '/../autoload.php';
+
+use ApiHelper\Request\RequestListener;
 
 // ------------------------------------------------------------------------
 
-
-include_once "HTTPRequest.php";
-
-// 1) Create the index handler, passing the endpoints paths
-$request = new HTTPRequest("method");
+// 1) Create the listener, passing the endpoints paths
+$request = new RequestListener("method");
 $request->setGETEndpoints(
-    "ApiHelper/ApiTest/functions/read/getAllUsers.php",
-    "ApiHelper/ApiTest/functions/read/getUserById.php"
+    "ApiHelper/tests/functions/read/getAllUsers.php",
+    "ApiHelper/tests/functions/read/getUserById.php"
 );
 $request->setPOSTEndpoints(
-    "ApiHelper/ApiTest/functions/write/setUser.php",
-    "ApiHelper/ApiTest/functions/update/updateUser.php",
-    "ApiHelper/ApiTest/functions/delete/deleteUser.php"
+    "ApiHelper/tests/functions/write/setUser.php",
+    "ApiHelper/tests/functions/update/updateUser.php",
+    "ApiHelper/tests/functions/delete/deleteUser.php"
 );
 
 // 2) Listen to the request
@@ -26,7 +29,7 @@ $request->listen();
 // ------------------------------------------------------------------------
 
 function simulateGET(){
-    $_GET['method'] = 'getAllUsers';
+    $_GET['method'] = 'getUserById';
     $_GET['id'] = 1;
 
 }
@@ -41,6 +44,8 @@ function simulateInsert(){
 function simulateUpdate(){
     $_SERVER['REQUEST_METHOD'] = 'POST';
     $_POST['method'] = 'updateUser';
+    $_POST['id'] = 5;
+
     $_POST['username'] = 'johndoeUpdated';
     $_POST['password'] = 'test1234Updated';
 }
@@ -48,5 +53,5 @@ function simulateUpdate(){
 function simulateDelete(){
     $_SERVER['REQUEST_METHOD'] = 'POST';
     $_POST['method'] = 'deleteUser';
-    $_POST['id'] = 3;
+    $_POST['id'] = 5;
 }

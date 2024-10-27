@@ -1,10 +1,9 @@
 <?php
 
-include_once 'Endpoint.php';
-include_once 'Configuration/ServerConfig.php';
-include_once 'Response/Response.php';
+namespace ApiHelper\Request;
+use ApiHelper\Response\Response;
 
-class HTTPRequest {
+class RequestListener {
     /**
      * @var Endpoint[]
      */
@@ -48,6 +47,7 @@ class HTTPRequest {
                 break;
 
             case 'POST':
+                $_POST = $_POST ?? json_decode(file_get_contents('php://input'), true);
                 Response::echoExternalResponse($this->postEndpoints()); 
                 break;
             

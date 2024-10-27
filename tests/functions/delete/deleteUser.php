@@ -1,11 +1,14 @@
 <?php 
 
-function deleteUser(){
-    checkRequiredParam(['id'], 'POST');
+use ApiHelper\Utils\Utils;
+use ApiHelper\Response\Response;
 
-    includeOnce('ApiHelper/ApiTest/dbHandler.php');
+function deleteUser(){
+    Utils::checkRequiredParams(['id'], 'POST');
+    Utils::includeOnce('ApiHelper/tests/dbHandler.php');
+
     $db = new dBHandler();
-    $deleted = $db->deleteUser(POST['id']);
+    $deleted = $db->deleteUser($_POST['id']);
 
     if($db->getAffectedRows() < 1){
         return new Response(false, 'User dont exist', 500);

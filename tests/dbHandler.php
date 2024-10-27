@@ -1,15 +1,15 @@
 <?php 
 
-include_once "Configuration/ServerConfig.php";
-include_once "QueryHandler.php";
+use ApiHelper\Configuration\ServerConfig;
+use ApiHelper\Request\QueryHandler;
 
 class dBHandler{
     private $PDO;
     private ServerConfig $serverConfig;
     private QueryHandler $queryHandler;
     public function __construct() {
-        $this->serverConfig = new ServerConfig('apihelpertest', 'root', '');
-        $this->PDO = $this->serverConfig->connectDBPDO();   
+        $this->serverConfig = ServerConfig::getInstance('apihelpertest', 'root', '');
+        $this->PDO = $this->serverConfig->connectDBPDO();
         $this->queryHandler = new QueryHandler($this->PDO);
     }
 

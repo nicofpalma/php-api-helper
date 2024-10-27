@@ -1,12 +1,15 @@
 <?php
 
+use ApiHelper\Utils\Utils;
+use ApiHelper\Response\Response;
+
 function setUser(){
-    checkRequiredParams(['username', 'password'], 'POST');
+    Utils::checkRequiredParams(['username', 'password'], 'POST');
 
-    $username = POST['username'];
-    $password = POST['password'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
-    includeOnce('ApiHelper/ApiTest/dbHandler.php');
+    Utils::includeOnce('ApiHelper/tests/dbHandler.php');
     $db = new dBHandler();
     $inserted = $db->insertUser($username, $password);
 

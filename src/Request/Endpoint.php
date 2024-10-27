@@ -1,6 +1,9 @@
 <?php
 
-include_once "Utils/Utils.php";
+namespace ApiHelper\Request;
+
+use Exception;
+use ApiHelper\Utils\Utils;
 
 class Endpoint{
     private $endpoint;
@@ -8,7 +11,7 @@ class Endpoint{
     private $path;
 
     public function __construct($endpointPath) {
-        includeOnce($endpointPath);
+        Utils::includeOnce($endpointPath);
 
         $this->path = $endpointPath;
         $this->endpoint = $this->extractFunctionName($this->path);
