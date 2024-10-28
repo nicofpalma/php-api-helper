@@ -44,7 +44,7 @@ function simulateInsert(){
 function simulateUpdate(){
     $_SERVER['REQUEST_METHOD'] = 'POST';
     $_POST['method'] = 'updateUser';
-    $_POST['id'] = 5;
+    $_POST['id'] = 6;
 
     $_POST['username'] = 'johndoeUpdated';
     $_POST['password'] = 'test1234Updated';
@@ -53,5 +53,5 @@ function simulateUpdate(){
 function simulateDelete(){
     $_SERVER['REQUEST_METHOD'] = 'POST';
     $_POST['method'] = 'deleteUser';
-    $_POST['id'] = 5;
+    $_POST['id'] = 6;
 }

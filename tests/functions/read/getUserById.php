@@ -5,10 +5,10 @@ use ApiHelper\Response\Response;
 
 function getUserById(){
     Utils::checkRequiredParams(['id'], 'GET');
-    Utils::includeOnce('ApiHelper/tests/dbHandler.php');
+    Utils::includeOnce('ApiHelper/tests/User.php');
 
-    $db = new dBHandler();
-    $user = $db->getUserById($_GET['id']);
+    $user = new User();
+    $userFetched = $user->findById($_GET['id']);
 
-    return new Response(true, 'user fetched', 200, ['response' => $user]);
+    return new Response(true, 'user fetched', 200, ['response' => $userFetched]);
 }

@@ -9,13 +9,15 @@ function setUser(){
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    Utils::includeOnce('ApiHelper/tests/dbHandler.php');
-    $db = new dBHandler();
-    $inserted = $db->insertUser($username, $password);
+    Utils::includeOnce('ApiHelper/tests/User.php');
+    $user = new User();
+    $user->setUsername($username);
+    $user->setPassword($password);
+    $inserted = $user->save();
 
     if($inserted){
-        $lastId = $db->getLastInsertedId();
-        $user = $db->getUserById($lastId);
+        $lastId = $user->getLastInsertedId();
+        $user = $user->findById($lastId);
     
         return new Response(true, "User created", 201, ["response" => $user]);
     } else {

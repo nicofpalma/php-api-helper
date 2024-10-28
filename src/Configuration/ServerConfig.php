@@ -46,4 +46,8 @@ class ServerConfig{
         }
         return $this->PDOMYSQL;
     }
+
+    public function getPDOInstance(){
+        return $this->PDOMYSQL;
+    }
 }

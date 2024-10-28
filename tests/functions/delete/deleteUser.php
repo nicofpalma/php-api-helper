@@ -5,12 +5,13 @@ use ApiHelper\Response\Response;
 
 function deleteUser(){
     Utils::checkRequiredParams(['id'], 'POST');
-    Utils::includeOnce('ApiHelper/tests/dbHandler.php');
+    Utils::includeOnce('ApiHelper/tests/User.php');
 
-    $db = new dBHandler();
-    $deleted = $db->deleteUser($_POST['id']);
+    $user = new User();
+    $user->setId($_POST['id']);
+    $deleted = $user->deleteUser();
 
-    if($db->getAffectedRows() < 1){
+    if($user->getAffectedRows() < 1){
         return new Response(false, 'User dont exist', 500);
     } elseif(!$deleted){
         return new Response(false, 'Error deleting user', 500);
