@@ -9,7 +9,6 @@ function getUserPosts(){
     Utils::includeOnce("ApiHelper/tests/User.php");
     Utils::includeOnce("ApiHelper/tests/Post.php");
 
-
     $user = new User();
     $user->setId($_GET['id']);
     $posts = $user->hasMany(Post::class, 'userid');

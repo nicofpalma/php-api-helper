@@ -50,8 +50,7 @@ class ServerConfig{
                 $this->PDOMYSQL->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $this->PDOMYSQL->exec("SET CHARACTER SET utf8mb4");
             } catch (Exception $e) {
-                $res = new Response(false, 'Error connecting to DB', 500, ['SQLERROR' => $e->getMessage()]);
-                $res->echoResponse();
+                (new Response(false, 'Error connecting to DB', 500, ['SQLERROR' => $e->getMessage()]))->echoResponse();
                 exit;
             }
         }

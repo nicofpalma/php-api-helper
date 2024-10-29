@@ -13,10 +13,7 @@ function getUserByPost(){
     $user = $post->belongsTo(User::class, 'userid');
 
     if($user){
-        return new Response(true, 'User fetched', 200, ['response' => [
-            "post" => $postFetched,
-            "user" => $user
-        ]]);
+        return new Response(true, 'User fetched', 200, ['response' => $user]);
     } else {
         return new Response(false, 'Cant fetch user', 500);
     }

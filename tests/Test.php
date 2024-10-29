@@ -3,6 +3,8 @@
 //simulateGetUsersPosts();
 //simulateGET();
 simulateGetUserByPost();
+//simulateGetUserPublishedPosts();
+
 //simulateUpdate();
 //simulateInsert();
 //simulateDelete();
@@ -20,7 +22,8 @@ $request->setGETEndpoints(
     "ApiHelper/tests/functions/read/getUserById.php",
     "ApiHelper/tests/functions/read/getByUsername.php",
     "ApiHelper/tests/functions/read/getUserPosts.php",
-    "ApiHelper/tests/functions/read/getUserByPost.php"
+    "ApiHelper/tests/functions/read/getUserByPost.php",
+    "ApiHelper/tests/functions/read/getUserPublishedPosts.php"
 );
 $request->setPOSTEndpoints(
     "ApiHelper/tests/functions/write/setUser.php",
@@ -32,6 +35,12 @@ $request->setPOSTEndpoints(
 $request->listen();
 
 // ------------------------------------------------------------------------
+
+function simulateGetUserPublishedPosts(){
+    $_GET['method'] = 'getUserPublishedPosts';
+    $_GET['userid'] = 1;
+
+}
 
 function simulateGetUserByPost(){
     $_GET['method'] = 'getUserByPost';

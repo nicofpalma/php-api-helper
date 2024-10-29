@@ -4,17 +4,46 @@ namespace ApiHelper\ORM;
 use ApiHelper\Configuration\ServerConfig;
 use ApiHelper\Request\QueryHandler;
 use ApiHelper\ORM\ModelAttributes;
-use Exception;
 
+/**
+ * Main class to handle models on database.
+ * Has methods to handle CRUD operations and relations.
+ */
 class Model{
+    /** 
+     * @var string Name of the table on database.
+     */
     protected static $tableName;
-    protected ModelAttributes $attributes;
-    protected ServerConfig $serverConfig;
-    protected $queryHandler;
 
+    /** 
+     * @var ModelAttributes Model attributes (database fields on the table).
+     */
+    protected ModelAttributes $attributes;
+
+    /** 
+     * @var ServerConfig Handler of connection to PDO.
+     */
+    protected ServerConfig $serverConfig;
+
+    /** 
+     * @var QueryHandler Handler of querys and responses from the database.
+     */
+    protected QueryHandler $queryHandler;
+
+    /**
+     * Model constructor.
+     *
+     * @param string $DBNAME Database name.
+     * @param string $DBUSER Database user.
+     * @param string $DBPASSWD User password.
+     */
     public function __construct(string $DBNAME, string $DBUSER, string $DBPASSWD) {
         $this->serverConfig = ServerConfig::getInstance($DBNAME, $DBUSER, $DBPASSWD);
         $this->queryHandler = new QueryHandler($this->serverConfig->connectDBPDO());
+    }
+
+    public function getTableName(){
+        return static::$tableName;
     }
 
     public function initializeAttributes(string $primaryKeyName){
@@ -25,12 +54,18 @@ class Model{
         return $this->attributes->getAttributes();
     }
 
+
+
     public function setAttributes(array $attributes, string $primaryKey){
         $this->attributes = new ModelAttributes($primaryKey);
         $this->attributes->set($attributes);
     }
 
     public function getLastInsertedId(){
+        $lastInsertedId = $this->queryHandler->getLastInsertedId();
+        if(!$lastInsertedId){
+            throw new \Exception("Cannot retrieve the last inserted id on table: {$this->getTableName()}");
+        }
         return $this->queryHandler->getLastInsertedId();
     }
 
@@ -58,7 +93,7 @@ class Model{
             }
         }
 
-        throw new Exception("Invalid Query");
+        throw new \Exception("Invalid Query");
     }
 
     public function save(){
@@ -117,6 +152,21 @@ class Model{
         $this->queryHandler->setTypeOfQuery(QueryHandler::SELECT);
         return $this->queryHandler->makeQuery($query, [$attributeName => $value]);
     }
+
+    public function findByAttributes(array $conditions, $columns = []){
+        $query = !empty($columns) ? "SELECT " . implode(", ", $columns) : "SELECT *";
+        $query .= "FROM " . static::$tableName . " WHERE ";
+
+        $whereClauses = [];
+        foreach ($conditions as $key => $value) {
+            $whereClauses[] = "$key = :$key";
+        }
+        $query .= implode(" AND ", $whereClauses);
+
+        $this->queryHandler->setTypeOfQuery(QueryHandler::SELECT);
+        return $this->queryHandler->makeQuery($query, $conditions);
+    }
+
 
     protected function findByPrimaryKey($columns = []){
         $pkName = $this->getPrimaryKeyName();

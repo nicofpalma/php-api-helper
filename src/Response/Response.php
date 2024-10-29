@@ -4,12 +4,14 @@ namespace ApiHelper\Response;
 
 class Response{
     private array $response;
+    protected $boolName = 'success';
+    protected $messageName = 'msg';
 
     public function __construct(bool $success, string $msg, int $httpCode, $response = [], ...$args) {
         $this->response = array_merge(
             [
-                'success' => $success,
-                'msg' => $msg,
+                $this->boolName => $success,
+                $this->messageName => $msg,
                 'httpCode' => $httpCode
             ],
             $response,

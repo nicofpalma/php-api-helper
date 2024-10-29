@@ -4,7 +4,7 @@ namespace ApiHelper\ORM;
 
 class ModelAttributes{
     private string $primaryKeyName;
-    // private string $foreignKeyName;
+
     private array $attributes;
 
     public function __construct(string $primaryKeyName) {
@@ -21,6 +21,9 @@ class ModelAttributes{
     }
 
     public function getAttribute(string $attributeName){
+        if(!isset($this->attributes[$attributeName])) {
+            throw new \Exception("The attribute {$attributeName} is not set in attributes.");
+        }
         return $this->attributes[$attributeName];
     }
 
@@ -41,16 +44,11 @@ class ModelAttributes{
     }
 
     public function getPrimaryKeyValue(){
+        if(!$this->pkIsSet()){
+            throw new \Exception("Primary key value is not set in attributes");
+        }
         return $this->attributes[$this->primaryKeyName];
     }
-
-    // public function getForeignKeyName(){
-    //     return $this->foreignKeyName;
-    // }
-
-    // public function getForeignKeyValue(){
-    //     return $this->attributes[$this->foreignKeyName];
-    // }
 
     public function getAttributes(){
         return $this->attributes;
