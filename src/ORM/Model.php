@@ -21,6 +21,10 @@ class Model{
         $this->attributes = new ModelAttributes($primaryKeyName);
     }
 
+    public function getAttributes(){
+        return $this->attributes->getAttributes();
+    }
+
     public function setAttributes(array $attributes, string $primaryKey){
         $this->attributes = new ModelAttributes($primaryKey);
         $this->attributes->set($attributes);
@@ -81,16 +85,10 @@ class Model{
     }
 
     protected function update(){
-        $valuesToSet = "";
         $allAttributes = $this->attributes->getAttributes(); 
         $pkName = $this->getPrimaryKeyName();
 
-        foreach ($allAttributes as $key => $value) {
-            if($key !== $pkName){
-                $valuesToSet .= "$key = :$key, ";
-            }
-        }
-        $valuesToSet = rtrim($valuesToSet, ", ");
+        $valuesToSet = $this->transformArrayToColumns($allAttributes);
 
         $query = "UPDATE " . static::$tableName . " SET $valuesToSet WHERE $pkName = :$pkName"; 
         $this->queryHandler->setTypeOfQuery(QueryHandler::UPDATE);
@@ -100,11 +98,24 @@ class Model{
     private function transformArrayToColumns(array $columns){
         $columnsString = "";
         foreach ($columns as $column) {
-            $columnsString .= "$column,";
+            $columnsString .= "$column, ";
         }
         $columnsString = rtrim($columnsString, ", ");
 
         return $columnsString;
+    }
+
+    protected function findByAttribute(string $attributeName, $value, $columns = []){
+        if(!empty($columns)){
+            $columns = $this->transformArrayToColumns($columns);
+            $query = "SELECT $columns FROM ";
+        } else {
+            $query = "SELECT * FROM ";
+        }
+
+        $query .= static::$tableName . " WHERE $attributeName = :$attributeName";
+        $this->queryHandler->setTypeOfQuery(QueryHandler::SELECT);
+        return $this->queryHandler->makeQuery($query, [$attributeName => $value]);
     }
 
     protected function findByPrimaryKey($columns = []){
@@ -150,5 +161,36 @@ class Model{
 
     public function getAffectedRows(){
         return $this->queryHandler->getAffectedRows();
+    }
+
+    /**
+     * One to many
+     */
+    public function hasMany(string $relatedModel, string $foreignKey){
+        $related = new $relatedModel(
+            $this->serverConfig->getDBName(),
+            $this->serverConfig->getDBUser(),
+            $this->serverConfig->getDBPass()
+        );
+
+        $primaryKeyValue = $this->getPrimaryKeyValue();
+
+        return $related->findByAttribute($foreignKey, $primaryKeyValue);
+    }
+
+    /**
+     * Many to one
+     */
+    public function belongsTo(string $relatedModel, string $foreignKey){
+        $related = new $relatedModel(
+            $this->serverConfig->getDBName(),
+            $this->serverConfig->getDBUser(),
+            $this->serverConfig->getDBPass()
+        );
+
+        $foreignKeyValue = $this->attributes->getAttribute($foreignKey);
+        $related->setAttributes([$related->getPrimaryKeyName() => $foreignKeyValue], $related->getPrimaryKeyName());
+
+        return $related->findByPrimaryKey();
     }
 }

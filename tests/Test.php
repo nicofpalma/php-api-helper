@@ -1,6 +1,8 @@
 <?php
 // to simulate data entry
-simulateGET();
+//simulateGetUsersPosts();
+//simulateGET();
+simulateGetUserByPost();
 //simulateUpdate();
 //simulateInsert();
 //simulateDelete();
@@ -15,7 +17,10 @@ use ApiHelper\Request\RequestListener;
 $request = new RequestListener("method");
 $request->setGETEndpoints(
     "ApiHelper/tests/functions/read/getAllUsers.php",
-    "ApiHelper/tests/functions/read/getUserById.php"
+    "ApiHelper/tests/functions/read/getUserById.php",
+    "ApiHelper/tests/functions/read/getByUsername.php",
+    "ApiHelper/tests/functions/read/getUserPosts.php",
+    "ApiHelper/tests/functions/read/getUserByPost.php"
 );
 $request->setPOSTEndpoints(
     "ApiHelper/tests/functions/write/setUser.php",
@@ -28,8 +33,19 @@ $request->listen();
 
 // ------------------------------------------------------------------------
 
+function simulateGetUserByPost(){
+    $_GET['method'] = 'getUserByPost';
+    $_GET['id'] = 1;
+}
+
+function simulateGetUsersPosts(){
+    $_GET['method'] = 'getUserPosts';
+    $_GET['id'] = 1;
+}
+
 function simulateGET(){
-    $_GET['method'] = 'getUserById';
+    $_GET['method'] = 'getByUsername';
+    $_GET['username'] = 'test1';
     $_GET['id'] = 1;
 
 }

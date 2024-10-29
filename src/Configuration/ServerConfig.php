@@ -14,10 +14,22 @@ class ServerConfig{
 
     private static ?ServerConfig $instance = null;
 
-    private function __construct(string $DBNAME, string $DBUSER, $DBPASS) {
+    private function __construct(string $DBNAME, string $DBUSER, string $DBPASS) {
         $this->DBNAME = $DBNAME;
         $this->DBUSER = $DBUSER;
         $this->DBPASS = $DBPASS;
+    }
+
+    public function getDBName(){
+        return $this->DBNAME;
+    }
+
+    public function getDBUser(){
+        return $this->DBNAME;
+    }
+
+    public function getDBPass(){
+        return $this->DBNAME;
     }
 
     public static function getInstance(string $DBNAME, string $DBUSER, string $DBPASS): ServerConfig {
@@ -26,7 +38,6 @@ class ServerConfig{
         }
         return self::$instance;
     }
-
 
     public function connectDBPDO(){
         if($this->PDOMYSQL === null){

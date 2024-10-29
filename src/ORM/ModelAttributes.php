@@ -4,10 +4,10 @@ namespace ApiHelper\ORM;
 
 class ModelAttributes{
     private string $primaryKeyName;
-
+    // private string $foreignKeyName;
     private array $attributes;
 
-    public function __construct($primaryKeyName) {
+    public function __construct(string $primaryKeyName) {
         $this->primaryKeyName = $primaryKeyName; 
     }
 
@@ -43,6 +43,14 @@ class ModelAttributes{
     public function getPrimaryKeyValue(){
         return $this->attributes[$this->primaryKeyName];
     }
+
+    // public function getForeignKeyName(){
+    //     return $this->foreignKeyName;
+    // }
+
+    // public function getForeignKeyValue(){
+    //     return $this->attributes[$this->foreignKeyName];
+    // }
 
     public function getAttributes(){
         return $this->attributes;

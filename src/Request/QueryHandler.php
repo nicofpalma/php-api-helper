@@ -2,6 +2,7 @@
 
 namespace ApiHelper\Request;
 
+use Exception;
 use PDO;
 use PDOException;
 use InvalidArgumentException;
@@ -109,74 +110,6 @@ class QueryHandler{
             throw new RuntimeException("Database query failed: " . $e->getMessage());
         }
     }
-
-    // public function makeQuery(string $query, array $paramValues = [], $fetchOne = false, int $assocMethod = PDO::FETCH_ASSOC){
-    //     $paramNames = $this->extractParamNames($query, $paramValues);
-
-    //     try {
-    //         $stmt = $this->PDO->prepare($query);
-            
-    //         if(!empty($paramValues)){
-    //             foreach ($paramNames as $index => $paramName) {
-    //                 $paramValue = $paramValues[$index];
-
-    //                 if($this->protected){
-    //                     $paramValue = htmlentities(addslashes($paramValue));
-    //                 } 
-
-    //                 $stmt->bindValue(
-    //                     $paramName,
-    //                     $paramValue
-    //                 );
-    //             }
-    //         }
-
-    //         $success = $stmt->execute();
-
-    //         if(!$success){
-    //             throw new RuntimeException("Failed to execute query: " . implode(" ", $stmt->errorInfo()));
-    //         }
-
-    //         switch ($this->typeOfQuery) {
-    //             case self::SELECT:
-    //                 if($fetchOne){
-    //                     $response = $stmt->fetch(PDO::FETCH_ASSOC);
-    //                     if($response && $this->protected){
-    //                         foreach ($response as &$field) {
-    //                             $this->quitSlashesAndEntities($field);
-    //                         }
-    //                     }
-    //                 } else {
-    //                     $response = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    //                     if($response && $this->protected){
-    //                         foreach ($response as &$row) {
-    //                             foreach ($row as &$field) {
-    //                                 $this->quitSlashesAndEntities($field);
-    //                             }
-    //                         }
-    //                     }
-    //                 }
-    //                 break;
-    
-    //             case self::INSERT:
-    //                 $this->lastInsertedId = $this->PDO->lastInsertId();
-    //             case self::UPDATE:
-    //             case self::DELETE:
-    //                 $this->affectedRows = $stmt->rowCount();
-    //                 $response = $this->affectedRows > 0;
-    //                 break;
-                
-    //             default:
-    //                 throw new InvalidArgumentException("Unsopported query type");
-    //         }
-
-    //         $stmt->closeCursor();
-    //         return $response;
-
-    //     } catch(PDOException $e){
-    //         throw new RuntimeException("Database query failed: " . $e->getMessage());
-    //     }
-    // }
 
     public function getLastInsertedId(){
         return $this->lastInsertedId;

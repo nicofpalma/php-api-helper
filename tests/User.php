@@ -43,8 +43,7 @@ class User extends Model{
     }
 
     public function findByUsername(string $username){
-        $this->setUserAttributes(["username" => $username]);
-        return $this->customQuery("SELECT * FROM users WHERE username = :username");
+        return $this->findByAttribute("username", $username, ["password", "id"]);
     }
 
     public function getAllUsers(){
